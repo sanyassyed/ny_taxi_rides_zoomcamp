@@ -4,23 +4,23 @@ with tripdata as
  select *,
  row_number() over(partition by VendorID, tpep_pickup_datetime) as rn
  from {{ source('staging', 'yellow_tripdata') }}
-where VendorID is not null
+where {{ dbt_utils.safe_cast('VendorID',  api.Column.translate_type("integer"))}} is not null
 )
 select 
 -- identifiers
     {{dbt_utils.surrogate_key(['VendorID', 'tpep_pickup_datetime'])}} as tripid,
-    cast(VendorID as integer) as vendorid,
+    {{ dbt_utils.safe_cast('VendorID',  api.Column.translate_type("integer"))}} as vendorid,
     cast(RatecodeID as integer) as ratecodeid,
-    cast(PULocationID as INTEGER) as pickup_locationid,			
-    cast(DOLocationID as INTEGER) as dropoff_locationid,
+    cast(PULocationID as integer) as pickup_locationid,			
+    cast(DOLocationID as integer) as dropoff_locationid,
 
     -- timestamps
-    cast(tpep_pickup_datetime as TIMESTAMP) as pickup_datetime,			
-    cast(tpep_dropoff_datetime as TIMESTAMP) as dropoff_datetime,
+    cast(tpep_pickup_datetime as timestamp) as pickup_datetime,			
+    cast(tpep_dropoff_datetime as timestamp) as dropoff_datetime,
 
     -- trip info
     store_and_fwd_flag,
-    cast(passenger_count as	INTEGER) as passenger_count,			
+    cast(passenger_count as	integer) as passenger_count,			
     cast(trip_distance as numeric)	as trip_distance,
     -- yellow cabs are always street-hail
     1 as trip_type,
@@ -43,7 +43,7 @@ where rn = 1
 
 
 -- dbt build --m <model.sql> --var 'is_test_run: false'
-{% if var('is_test_run', default=true) %}
+{% if var('is_test_run', default=false) %}
 
     limit 100
 
