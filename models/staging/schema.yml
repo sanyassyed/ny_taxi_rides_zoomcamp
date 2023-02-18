@@ -28,6 +28,9 @@ models:
             A code indicating the TPEP provider that provided the record
             1 = Creative Mobile Technologies, LLC;
             2 = VeriFone Inc.
+        tests:
+          - not_null:
+              severity: warn
       - name: pickup_datetime
         description: The date and time when the meter was engaged 
       - name: dropoff_datetime
@@ -118,6 +121,9 @@ models:
             A code indicating the TPEP provider that provided the record
             1 = Creative Mobile Technologies, LLC;
             2 = VeriFone Inc.
+        tests:
+          - not_null:
+              severity: warn
       - name: pickup_datetime
         description: The date and time when the meter was engaged 
       - name: dropoff_datetime
