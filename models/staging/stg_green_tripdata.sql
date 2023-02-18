@@ -30,6 +30,7 @@ select
     cast(mta_tax as numeric) as mta_tax,
     cast(tip_amount as numeric) as tip_amount,
     cast(tolls_amount as numeric) as tolls_amount,
+    -- some ehail fees are null and casting them to integer gives Bad int64 value: 0.0 error, hence using safe_cast returns NULL instead of throwing an error
     {{ dbt_utils.safe_cast('ehail_fee',  api.Column.translate_type("integer"))}} as ehail_fee,
     cast(improvement_surcharge as numeric) as improvement_surcharge,
     cast(total_amount as numeric) as total_amount,
@@ -39,7 +40,7 @@ select
 from tripdata	
 where rn = 1
 -- dbt build --m <model.sql> --var 'is_test_run: false'
-{% if var('is_test_run', default=false) %}
+{% if var('is_test_run', default=true) %}
 
     limit 100
 
