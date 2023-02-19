@@ -2,9 +2,16 @@
 with tripdata as
 (
  select *,
- row_number() over(partition by VendorID, tpep_pickup_datetime) as rn
+ row_number() over(partition by 
+     VendorID, tpep_pickup_datetime
+     order by
+     fare_amount,
+     PULocationid,
+     tpep_pickup_datetime, 
+     tpep_dropoff_datetime 
+) as rn
  from {{ source('staging', 'yellow_tripdata') }}
-where {{ dbt_utils.safe_cast('VendorID',  api.Column.translate_type("integer"))}} is not null
+where VendorID is not null
 )
 select 
 -- identifiers
