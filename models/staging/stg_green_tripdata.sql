@@ -8,7 +8,11 @@ with tripdata as
      VendorID, lpep_pickup_datetime
      order by
      fare_amount,
-     lpep_dropoff_datetime) as rn
+     PULocationid,
+     lpep_pickup_datetime, 
+     lpep_dropoff_datetime 
+
+) as rn
  from {{ source('staging', 'green_tripdata') }}
 where VendorID is not null
 )
