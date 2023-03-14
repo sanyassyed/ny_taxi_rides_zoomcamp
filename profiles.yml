@@ -1,0 +1,11 @@
+bg-de-zoomcamp:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: blissful-flames-375219
+      dataset: dbt_sanya_models
+      threads: 4
+      priority: interactive
+      keyfile: /home/sanyashireen/.google/credentials/google_credentials.json

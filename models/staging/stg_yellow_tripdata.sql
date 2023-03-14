@@ -16,7 +16,7 @@ where VendorID is not null
 select 
 -- identifiers
     {{dbt_utils.surrogate_key(['VendorID', 'tpep_pickup_datetime'])}} as tripid,
-    {{ dbt_utils.safe_cast('VendorID',  api.Column.translate_type("integer"))}} as vendorid,
+    {{dbt_utils.safe_cast('VendorID',  api.Column.translate_type("integer"))}} as vendorid,
     cast(RatecodeID as integer) as ratecodeid,
     cast(PULocationID as integer) as pickup_locationid,			
     cast(DOLocationID as integer) as dropoff_locationid,
